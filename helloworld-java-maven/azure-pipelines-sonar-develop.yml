@@ -1,0 +1,14 @@
+pool:
+  name: Azure Pipelines
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - develop
+
+steps:
+
+  - script: gradlew -Psonar -Dsonar.branch.name=%BUILD_SOURCEBRANCH:~11% -Dsonar.host.url={SONAR_URL} sonarqube --stacktrace
+      workingDirectory: 'src'
+      displayName: 'SonarQube Branch Analysis'

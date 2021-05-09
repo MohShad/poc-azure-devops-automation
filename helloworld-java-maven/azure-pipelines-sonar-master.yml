@@ -1,0 +1,14 @@
+pool:
+  name: Azure Pipelines
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - master
+
+steps:
+
+  - script: mvn sonar:sonar -Dsonar.host.url={SONAR_QUBE_URL_SET_HERE} -Dsonar.login={THE-GENERATED-TOKEN} sonarqube --stacktrace
+    workingDirectory: 'src'
+    displayName: 'SonarQube analysis'

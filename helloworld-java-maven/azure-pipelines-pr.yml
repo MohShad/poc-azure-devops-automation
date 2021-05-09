@@ -1,0 +1,14 @@
+trigger: none
+
+pool:
+  name: Azure Pipelines
+
+steps:
+
+  - script: mvn sonar:sonar -Dsonar.pullrequest.key=$(System.PullRequest.PullRequestId) -Dsonar.pullrequest.base=%SYSTEM_PULLREQUEST_TARGETBRANCH:~11% -Dsonar.pullrequest.branch=%SYSTEM_PULLREQUEST_SOURCEBRANCH:~11% -Dsonar.host.url={SONAR_QUBE_URL_SET_HERE} sonarqube --stacktrace
+    workingDirectory: 'src'
+    displayName: 'SonarQube analysis'
+
+  - script: exec-pull-request-decorator.bat {SONAR_QUBE_URL_SET_HERE} .\build\sonar\report-task.txt $(System.TeamProjectId) $(Build.Repository.ID) $(System.PullRequest.PullRequestId) "" $(System.AccessToken) 172.16.5.113
+    workingDirectory: 'src'
+    displayName: 'PR feedback from SonarQube'
